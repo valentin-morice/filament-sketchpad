@@ -14,7 +14,7 @@ composer require valentin-morice/filament-sketchpad
 
 ## Usage
 
-The filament-sketchpad plugin works as any other Filament Form Builder class. Make sure the column on which it is called is cast to JSON or array within your Eloquent model.
+The filament-sketchpad plugin works as any other Filament Form Builder class. Make sure the column on which it is called is cast to JSON.
 
 ```php
 public static function form(Form $form): Form
