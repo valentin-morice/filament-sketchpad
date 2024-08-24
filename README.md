@@ -1,5 +1,7 @@
 # filament-sketchpad
 
+![Screenshot from 2024-08-24 15-37-49](https://github.com/user-attachments/assets/28b0c2ab-b296-4e60-92d5-45f78c92894c)
+
 A simple package that provides you with a sketchpad field in Filament
 
 ## Installation
