@@ -40,7 +40,8 @@ class FilamentSketchpadServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         FilamentAsset::register([
-            Js::make('sketchpad', __DIR__ . '/../resources/js/sketchpad.js'),
+            Js::make('sketchpad', __DIR__ . '/../resources/js/filament-sketchpad.js'),
+            Css::make('sketchpad', __DIR__ . '/../resources/css/filament-sketchpad.css'),
         ]);
     }
 }

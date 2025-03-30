@@ -3,11 +3,11 @@
 namespace ValentinMorice\FilamentSketchpad;
 
 use Closure;
-use Filament\Forms\Components\Field;
+use Filament\Infolists\Components\Entry;
 
-class FilamentSketchpad extends Field
+class SketchpadInfolist extends Entry
 {
-    protected string $view = 'filament-sketchpad::index';
+    protected string $view = 'filament-sketchpad::infolist';
 
     public int | Closure $height = 400;
 
@@ -16,7 +16,8 @@ class FilamentSketchpad extends Field
         return $this->evaluate($this->height);
     }
 
-    public function height(int | Closure $height): static {
+    public function height(int | Closure $height): static
+    {
         $this->height = $height;
 
         return $this;

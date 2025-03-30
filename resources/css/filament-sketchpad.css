@@ -1,0 +1,31 @@
+.master {
+    border: #e5e7eb solid 1px;
+}
+
+.top {
+    border-top: #e5e7eb solid 1px;
+}
+
+.bottom {
+    border-bottom: #e5e7eb solid 1px;
+}
+
+:is(.dark) .top {
+    border-top: hsla(0,0%,100%,.2) solid 1px !important;
+}
+
+:is(.dark) .bottom {
+    border-bottom: hsla(0,0%,100%,.2) solid 1px !important;
+}
+
+:is(.dark) .master {
+    border: hsla(0,0%,100%,.2) solid 1px !important;
+}
+
+:is(.dark) canvas {
+    background-color: white;
+}
+
+canvas {
+    background-color: white;
+}

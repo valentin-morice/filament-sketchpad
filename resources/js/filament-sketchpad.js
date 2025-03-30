@@ -1,4 +1,4 @@
-class Sketchpad {
+class FilamentSketchpad {
   constructor(options) {
     // Support both old api (element) and new (canvas)
     options.canvas = options.canvas || options.element;
@@ -28,7 +28,7 @@ class Sketchpad {
 
     this.readOnly = this.readOnly || false;
 
-    // Sketchpad History settings
+    // FilamentSketchpad History settings
     this.strokes = options.strokes || [];
 
     this.undoHistory = options.undoHistory || [];
@@ -116,7 +116,9 @@ class Sketchpad {
 
   onMouseUp(event) {
     if (this._sketching) {
-      this.strokes.push(this._currentStroke);
+      if (this._currentStroke.lines.length > 0) {
+          this.strokes.push(this._currentStroke);
+      }
       this._sketching = false;
     }
 
@@ -300,4 +302,4 @@ class Sketchpad {
   }
 }
 
-window.Sketchpad = Sketchpad;
+window.Sketchpad = FilamentSketchpad;
