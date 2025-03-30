@@ -21,7 +21,16 @@ public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                FilamentSketchpad::make('example'),
+                Sketchpad::make('example'),
+            ]);
+    }
+
+// An infolist component is also available.
+public static function infolist(Infolist $infolist): Form
+    {
+        return $form
+            ->schema([
+                SketchpadInfolist::make('example'),
             ]);
     }
 ```
@@ -29,6 +38,66 @@ public static function form(Form $form): Form
 ### Set the height
 ```php
 FilamentSketchpad::make('example')->height(int 400|Closure); // in px
+```
+
+### Set history configuration
+```php
+// Provide full or partial configuration.
+// Keys 'undo' and 'redo' are mandatory.
+
+$config = [
+    'undo' => [
+         'label' => 'Undo',
+         'icon' => 'heroicon-o-arrow-left',
+         'color' => 'gray',
+    ],
+    'redo' => [
+            'label' => 'Redo',
+            'icon' => 'heroicon-o-arrow-right',
+            'color' => 'gray',
+    ],
+];
+
+FilamentSketchpad::make('example')->history(array |Closure $config);
+```
+
+### Set controls configuration
+```php
+// Provide full or partial configuration.
+// Keys 'clear' and 'reset' are mandatory.
+
+$config = [
+    'clear' => [
+            'label' => 'Clear',
+            'icon' => 'heroicon-o-document',
+            'color' => 'gray',
+    ],
+    'reset' => [
+            'label' => 'Reset',
+            'icon' => 'heroicon-o-trash',
+            'color' => 'gray',
+    ],
+];
+
+FilamentSketchpad::make('example')->controls(array |Closure $config);
+```
+
+### Set download configuration
+```php
+// Provide full or partial configuration.
+$config = [
+            'label' => 'Download',
+            'icon' => 'heroicon-m-arrow-down-tray',
+            'color' => 'gray',
+          ];
+
+FilamentSketchpad::make('example')->download(array |Closure $config);
+```
+
+### Minimal mode
+Display only icons instead of buttons.
+```php
+FilamentSketchpad::make('example')->minimal(bool|Closure $bool = true);
 ```
 NOTE: All standard injected utilities are available in your closure.
 
