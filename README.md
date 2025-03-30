@@ -35,11 +35,6 @@ public static function infolist(Infolist $infolist): Form
     }
 ```
 
-### Set the height
-```php
-FilamentSketchpad::make('example')->height(int 400|Closure); // in px
-```
-
 ### Set history configuration
 ```php
 // Provide full or partial configuration.
@@ -99,7 +94,12 @@ Display only icons instead of buttons.
 ```php
 FilamentSketchpad::make('example')->minimal(bool|Closure $bool = true);
 ```
-NOTE: All standard injected utilities are available in your closure.
+
+### Set the height
+```php
+FilamentSketchpad::make('example')->height(int 400|Closure); // in px
+```
+NOTE: All standard injected utilities are available in your closures.
 
 Thanks to [http://yiom.github.io/sketchpad/](http://yiom.github.io/sketchpad/) for the JS.
 
