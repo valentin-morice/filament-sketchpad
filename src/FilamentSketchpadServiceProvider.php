@@ -2,19 +2,11 @@
 
 namespace ValentinMorice\FilamentSketchpad;
 
-use Filament\Support\Assets\AlpineComponent;
-use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
-use Filament\Support\Facades\FilamentIcon;
-use Illuminate\Filesystem\Filesystem;
-use Livewire\Features\SupportTesting\Testable;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use ValentinMorice\FilamentSketchpad\Commands\FilamentSketchpadCommand;
-use ValentinMorice\FilamentSketchpad\Testing\TestsFilamentSketchpad;
 
 class FilamentSketchpadServiceProvider extends PackageServiceProvider
 {
@@ -30,18 +22,15 @@ class FilamentSketchpadServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package->name(static::$name)
-            ->hasViews();
-
-        $configFileName = $package->shortName();
+            ->hasViews()
+            ->hasTranslations();
     }
-
-    public function packageRegistered(): void {}
 
     public function packageBooted(): void
     {
         FilamentAsset::register([
-            Js::make('sketchpad', __DIR__ . '/../resources/js/filament-sketchpad.js'),
-            Css::make('sketchpad', __DIR__ . '/../resources/css/filament-sketchpad.css'),
-        ]);
+            Js::make('filament-sketchpad-js', __DIR__ . '/../resources/js/filament-sketchpad.js'),
+            Css::make('filament-sketchpad', __DIR__ . '/../resources/css/filament-sketchpad.css'),
+        ], 'filament-sketchpad');
     }
 }

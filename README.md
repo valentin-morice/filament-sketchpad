@@ -2,7 +2,14 @@
 
 ![Screenshot from 2024-08-24 15-37-49](https://github.com/user-attachments/assets/28b0c2ab-b296-4e60-92d5-45f78c92894c)
 
-A simple package that provides you with a sketchpad field in Filament
+A simple package that provides you with a sketchpad field in Filament.
+
+## Compatibility
+
+| Filament | filament-sketchpad |
+|----------|--------------------|
+| 5.x      | 2.x (this version) |
+| 3.x      | 1.x                |
 
 ## Installation
 
@@ -14,22 +21,27 @@ composer require valentin-morice/filament-sketchpad
 
 ## Usage
 
-The filament-sketchpad plugin works as any other Filament Form Builder class. Make sure the column on which it is called is cast to JSON.
+The filament-sketchpad plugin works as any other Filament schema component. Make sure the column on which it is called is cast to `array` (or `json`).
 
 ```php
-public static function form(Form $form): Form
+use ValentinMorice\FilamentSketchpad\Sketchpad;
+use Filament\Schemas\Schema;
+
+public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Sketchpad::make('example'),
             ]);
     }
 
 // An infolist component is also available.
-public static function infolist(Infolist $infolist): Form
+use ValentinMorice\FilamentSketchpad\SketchpadInfolist;
+
+public static function infolist(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 SketchpadInfolist::make('example'),
             ]);
     }
@@ -84,6 +96,7 @@ $config = [
             'label' => 'Download',
             'icon' => 'heroicon-m-arrow-down-tray',
             'color' => 'gray',
+            'filename' => 'my-sketch', // saved as my-sketch.png
           ];
 
 FilamentSketchpad::make('example')->download(array |Closure $config);
@@ -100,6 +113,19 @@ FilamentSketchpad::make('example')->minimal(bool|Closure $bool = true);
 FilamentSketchpad::make('example')->height(int 400|Closure); // in px
 ```
 NOTE: All standard injected utilities are available in your closures.
+
+## Translations
+
+All button labels and the read-only empty state respect Laravel's active locale.
+English (`en`) and French (`fr`) ship with the package. To customise or add a
+locale, publish the translations and edit the file:
+
+```bash
+php artisan vendor:publish --tag=filament-sketchpad-translations
+```
+
+This creates `lang/vendor/filament-sketchpad/{locale}/sketchpad.php`, exposing the
+`undo`, `redo`, `clear`, `reset`, `download` and `empty` keys.
 
 Thanks to [http://yiom.github.io/sketchpad/](http://yiom.github.io/sketchpad/) for the JS.
 

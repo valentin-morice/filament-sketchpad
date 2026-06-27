@@ -14,37 +14,65 @@ class Sketchpad extends Field
 
     public bool $minimal = false;
 
-    public array | Closure $history = [
-        'undo' => [
-            'label' => 'Undo',
-            'icon' => 'heroicon-o-arrow-left',
-            'color' => 'gray',
-        ],
-        'redo' => [
-            'label' => 'Redo',
-            'icon' => 'heroicon-o-arrow-right',
-            'color' => 'gray',
-        ],
-    ];
+    public array | Closure $history = [];
 
-    public array | Closure $controls = [
-        'clear' => [
-            'label' => 'Clear',
-            'icon' => 'heroicon-o-document',
-            'color' => 'gray',
-        ],
-        'reset' => [
-            'label' => 'Reset',
-            'icon' => 'heroicon-o-trash',
-            'color' => 'gray',
-        ],
-    ];
+    public array | Closure $controls = [];
 
-    public array | Closure $download = [
-        'label' => 'Download',
-        'icon' => 'heroicon-m-arrow-down-tray',
-        'color' => 'primary',
-    ];
+    public array | Closure $download = [];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->history = [
+            'undo' => [
+                'label' => __('filament-sketchpad::sketchpad.undo'),
+                'icon' => 'heroicon-o-arrow-left',
+                'color' => 'gray',
+            ],
+            'redo' => [
+                'label' => __('filament-sketchpad::sketchpad.redo'),
+                'icon' => 'heroicon-o-arrow-right',
+                'color' => 'gray',
+            ],
+        ];
+
+        $this->controls = [
+            'clear' => [
+                'label' => __('filament-sketchpad::sketchpad.clear'),
+                'icon' => 'heroicon-o-document',
+                'color' => 'gray',
+            ],
+            'reset' => [
+                'label' => __('filament-sketchpad::sketchpad.reset'),
+                'icon' => 'heroicon-o-trash',
+                'color' => 'gray',
+            ],
+        ];
+
+        $this->download = [
+            'label' => __('filament-sketchpad::sketchpad.download'),
+            'icon' => 'heroicon-m-arrow-down-tray',
+            'color' => 'primary',
+            'filename' => 'sketchpad',
+        ];
+
+        // The sketchpad works with a JSON *string* as its live state. When the
+        // model column is cast to `array`/`json`, the hydrated state is a PHP
+        // array, so we encode it back to a string for Alpine to parse.
+        $this->afterStateHydrated(function (Sketchpad $component, $state) {
+            if (is_array($state)) {
+                $component->state(json_encode($state));
+            }
+        });
+
+        // On dehydration we decode the JSON string back to a PHP array so an
+        // `array`/`json` cast stores a proper JSON object rather than a
+        // double-encoded JSON string.
+        $this->dehydrateStateUsing(function ($state) {
+            return is_string($state) ? json_decode($state, true) : $state;
+        });
+    }
 
     public function getHeight(): int
     {
@@ -97,10 +125,10 @@ class Sketchpad extends Field
      *     'redo' => ['color' => 'info']
      * ])
      *
-     * @param array{
+     * @param  array{
      *     undo?: array{label?: string, icon?: string, color?: string},
      *     redo?: array{label?: string, icon?: string, color?: string}
-     * }|Closure $config An associative array with 'undo' and/or 'redo' keys,
+     * }|Closure  $config An associative array with 'undo' and/or 'redo' keys,
      *                      or a Closure that returns such an array. Values are
      *                      arrays potentially containing 'label', 'icon', and 'color'.
      *
@@ -142,10 +170,10 @@ class Sketchpad extends Field
      *     'reset' => ['color' => 'info']
      * ])
      *
-     * @param array{
+     * @param  array{
      *     clear?: array{label?: string, icon?: string, color?: string},
      *     reset?: array{label?: string, icon?: string, color?: string}
-     * }|Closure $config An associative array with 'clear' and/or 'reset' keys,
+     * }|Closure  $config An associative array with 'clear' and/or 'reset' keys,
      *                      or a Closure that returns such an array. Values are
      *                      arrays potentially containing 'label', 'icon', and 'color'.
      *
@@ -165,12 +193,12 @@ class Sketchpad extends Field
 
         if (! empty($invalidKeys)) {
             throw new InvalidArgumentException(
-                'Invalid key(s) provided for history configuration: ' . implode(', ', $invalidKeys) .
+                'Invalid key(s) provided for controls configuration: ' . implode(', ', $invalidKeys) .
                 '. Only "clear" and "reset" are allowed.'
             );
         }
 
-        $this->history = array_replace_recursive($this->history, $evaluated);
+        $this->controls = array_replace_recursive($this->controls, $evaluated);
 
         return $this;
     }
@@ -184,14 +212,15 @@ class Sketchpad extends Field
      * ->download([
      *     'label' => 'Save Sketch',
      *     'color' => 'success',
-     *     'filename' => 'my-sketch.png'
+     *     'filename' => 'my-sketch'
      * ])
      *
-     * @param array{
+     * @param  array{
      *     label?: string,
      *     icon?: string,
      *     color?: string,
-     * }|Closure $config An associative array potentially containing 'label', 'icon',
+     *     filename?: string,
+     * }|Closure  $config An associative array potentially containing 'label', 'icon',
      *                      'color', and 'filename' keys, or a Closure that returns
      *                      such an array.
      *

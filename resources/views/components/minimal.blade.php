@@ -14,18 +14,19 @@
      x-init="
         $watch('penSize', value => sketchpad.penSize = value);
         $watch('color', value => sketchpad.color = value);
-        $watch('sketchpad', value => state = value.toJSON());
         const element = `#sketchpad_${id}`;
         if (state) {
             try {
-                parsed = JSON.parse(state)
-                penSize = parsed.strokes.at(-1).size
-                color = parsed.strokes.at(-1).color
-                state = parsed
-                state.height = height
-                state.element = element;
-                state.width = document.getElementById('sketchpad_container').clientWidth
-                sketchpad = new FilamentSketchpad(state)
+                const parsed = typeof state === 'string' ? JSON.parse(state) : state;
+                const last = parsed.strokes?.at(-1);
+                if (last) {
+                    penSize = last.size;
+                    color = last.color;
+                }
+                parsed.height = height;
+                parsed.element = element;
+                parsed.width = document.getElementById('sketchpad_container').clientWidth;
+                sketchpad = new FilamentSketchpad(parsed);
             } catch {
                 sketchpad = new FilamentSketchpad({
                             element,
@@ -93,7 +94,7 @@
                     link.style.display = 'none';
 
                     link.href = dataUrl;
-                    link.download = id;
+                    link.download = {{ \Illuminate\Support\Js::from(($download['filename'] ?? 'sketchpad').'.png') }};
                     document.body.appendChild(link);
                     link.click();
 
