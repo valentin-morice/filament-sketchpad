@@ -248,7 +248,7 @@ class FilamentSketchpad {
       }, delay + interval + loopInterval));
     }
 
-    this.animateIds(setTimeout(() => {
+    this.animateIds.push(setTimeout(() => {
       this.trigger('animation-end', [interval, loop, loopInterval]);
     }, delay + interval));
   }
@@ -303,3 +303,4 @@ class FilamentSketchpad {
 }
 
 window.Sketchpad = FilamentSketchpad;
+window.FilamentSketchpad = FilamentSketchpad;

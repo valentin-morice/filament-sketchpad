@@ -14,25 +14,32 @@
          x-init="
             $watch('penSize', value => sketchpad.penSize = value);
             $watch('color', value => sketchpad.color = value);
-            $watch('sketchpad', value => state = value.toJSON());
             const element = `#sketchpad_${id}`;
             if (state) {
                 try {
-                    parsed = JSON.parse(state)
-                    penSize = parsed.strokes.at(-1).size
-                    color = parsed.strokes.at(-1).color
-                    state = parsed
-                    state.height = height
-                    state.element = element;
-                    state.width = document.getElementById('sketchpad_container').clientWidth
-                    sketchpad = new FilamentSketchpad(state)
+                    const parsed = typeof state === 'string' ? JSON.parse(state) : state;
+                    const last = parsed.strokes?.at(-1);
+                    if (last) {
+                        penSize = last.size;
+                        color = last.color;
+                    }
+                    parsed.height = height;
+                    parsed.element = element;
+                    parsed.width = document.getElementById('sketchpad_container').clientWidth;
+                    parsed.readOnly = true;
+                    sketchpad = new FilamentSketchpad(parsed);
+                    state = parsed;
                 } catch {
-                    sketchpad = null
+                    sketchpad = null;
+                    state = null;
                 }
             }
         " style="box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); border-radius: 0.5rem; overflow: hidden" class="master">
         <canvas disabled x-show="state" style="cursor: not-allowed; pointer-events: none; width: 100%" id="sketchpad_{{ $uniqid }}">
         </canvas>
-        <x-filament::icon-button style="margin: 0 auto; pointer-events: none" icon="heroicon-m-eye-slash" x-show="!state" color="gray"/>
+        <div x-show="!state" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem 0;">
+            <x-filament::icon-button style="margin: 0 auto; pointer-events: none" icon="heroicon-m-eye-slash" color="gray"/>
+            <span style="font-size: 0.875rem; color: rgb(107 114 128);">{{ __('filament-sketchpad::sketchpad.empty') }}</span>
+        </div>
     </div>
 </x-dynamic-component>
